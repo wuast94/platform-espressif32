@@ -13,13 +13,13 @@ ESP32 is a series of low-cost, low-power system on a chip microcontrollers with 
 2. Create PlatformIO project and configure a platform option in [platformio.ini](https://docs.platformio.org/page/projectconf.html) file:
 
 ## Stable version
-espressif Arduino 3.0.2 and IDF 5.1.4
+espressif Arduino 3.0.3 and IDF 5.1.4
 
 See `platform` [documentation](https://docs.platformio.org/en/latest/projectconf/sections/env/options/platform/platform.html#projectconf-env-platform) for details.
 
 ```ini
 [env:stable]
-platform = https://github.com/pioarduino/platform-espressif32/releases/download/2024.07.00/platform-espressif32.zip
+platform = https://github.com/pioarduino/platform-espressif32/releases/download/51.03.03/platform-espressif32.zip
 board = ...
 ...
 ```
@@ -28,7 +28,7 @@ board = ...
 
 ```ini
 [env:development]
-platform = https://github.com/pioarduino/platform-espressif32.git#Arduino/IDF51
+platform = https://github.com/pioarduino/platform-espressif32.git#development
 board = ...
 ...
 ```
