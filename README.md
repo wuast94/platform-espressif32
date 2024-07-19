@@ -2,6 +2,7 @@
 # Fork of Platformio Espressif 32: development platform for [PlatformIO](https://platformio.org)
 
 [![Build Status](https://github.com/pioarduino/platform-espressif32/workflows/Examples/badge.svg)](https://github.com/pioarduino/platform-espressif32/actions)
+[![GitHub Releases](https://img.shields.io/github/downloads/pioarduino/platform-espressif32/total?label=downloads)](https://github.com/pioarduino/platform-espressif32/releases/latest)
 
 > [!NOTE]  
 > This fork was created due to the lack of ongoing development for the Espressif 32 Arduino Core for PlatformIO.
