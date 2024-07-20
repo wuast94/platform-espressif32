@@ -34,7 +34,7 @@ FRAMEWORK_DIR = platform.get_package_dir("framework-arduinoespressif32")
 
 idf_toolspy = join(platform.get_package_dir("framework-espidf"), "tools", "idf_tools.py")
 idf_toolspy_flag = ["install"]
-idf_toolspy_cmd = [env["PYTHONEXE"], idf_toolspy] + idf_toolspy_flags
+idf_toolspy_cmd = [env["PYTHONEXE"], idf_toolspy] + idf_toolspy_flag
 
 rc = subprocess.call(idf_toolspy_cmd)
 
