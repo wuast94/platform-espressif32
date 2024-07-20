@@ -1238,16 +1238,16 @@ def install_python_deps():
             )
         )
 
-        # A special "esp-windows-curses" python package is required on Windows
-        # for Menuconfig on IDF <5
-        if not IDF5 and "esp-windows-curses" not in installed_packages:
-            env.Execute(
-                env.VerboseAction(
-                    '"%s" -m pip install "file://%s/tools/kconfig_new/esp-windows-curses"'
-                    % (python_exe_path, FRAMEWORK_DIR),
-                    "Installing windows-curses package",
-                )
-            )
+#        # A special "esp-windows-curses" python package is required on Windows
+#        # for Menuconfig on IDF <5
+#        if not IDF5 and "esp-windows-curses" not in installed_packages:
+#            env.Execute(
+#                env.VerboseAction(
+#                    '"%s" -m pip install "file://%s/tools/kconfig_new/esp-windows-curses"'
+#                    % (python_exe_path, FRAMEWORK_DIR),
+#                    "Installing windows-curses package",
+#                )
+#            )
 
 
 def get_idf_venv_dir():
