@@ -15,7 +15,6 @@
 import re
 import sys
 import subprocess
-import os
 from os.path import isfile, join
 
 from SCons.Script import (
@@ -33,13 +32,11 @@ platform = env.PioPlatform()
 
 FRAMEWORK_DIR = platform.get_package_dir("framework-arduinoespressif32")
 
+idf_toolspy = join(platform.get_package_dir("framework-espidf"), "tools", "idf_tools.py")
+idf_toolspy_flag = ["install"]
+idf_toolspy_cmd = [env["PYTHONEXE"], idf_toolspy] + idf_toolspy_flags
 
-rc = subprocess.call(
-    [
-         os.path.join(platform.get_package_dir("framework-espidf"), "tools", "idf_tools.py"),
-         "install"
-    ],
-)
+rc = subprocess.call(idf_toolspy_cmd)
 
 if rc != 0:
     sys.stderr.write("Error: Couldn't execute 'idf_tools.py install' \n")
