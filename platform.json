@@ -43,7 +43,7 @@
     },
     "framework-espidf": {
       "type": "framework",
-      "optional": true,
+      "optional": false,
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/esp-idf/releases/download/v5.1.4.240712/esp-idf-v5.1.4.zip"
     },
@@ -51,43 +51,43 @@
       "type": "toolchain",
       "optional": true,
       "owner": "espressif",
-      "version": "12.2.0+20230208"
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-xtensa-esp32.zip"
     },
     "toolchain-xtensa-esp32s2": {
       "type": "toolchain",
       "optional": true,
       "owner": "espressif",
-      "version": "12.2.0+20230208"
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-xtensa-esp32s2.zip"
     },
     "toolchain-xtensa-esp32s3": {
       "type": "toolchain",
       "optional": true,
       "owner": "espressif",
-      "version": "12.2.0+20230208"
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-xtensa-esp32s3.zip"
     },
     "toolchain-riscv32-esp": {
       "type": "toolchain",
       "optional": true,
       "owner": "espressif",
-      "version": "12.2.0+20230208"
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-riscv32-esp.zip"
     },
     "toolchain-esp32ulp": {
       "type": "toolchain",
       "optional": true,
-      "owner": "platformio",
-      "version": "~1.23500.0"
+      "owner": "espressif",
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-esp32ulp.zip"
     },
       "tool-xtensa-esp-elf-gdb": {
       "type": "debugger",
       "optional": true,
       "owner": "espressif",
-      "version": "~12.1.0"
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/xtensa-esp-elf-gdb.zip"
     },
     "tool-riscv32-esp-elf-gdb": {
       "type": "debugger",
       "optional": true,
       "owner": "espressif",
-      "version": "~12.1.0"
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/riscv32-esp-elf-gdb.zip"
     },
     "tool-esptoolpy": {
       "type": "uploader",
