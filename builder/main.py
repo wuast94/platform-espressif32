@@ -14,6 +14,8 @@
 
 import re
 import sys
+import subprocess
+import os
 from os.path import isfile, join
 
 from SCons.Script import (
@@ -30,6 +32,18 @@ platform = env.PioPlatform()
 #
 
 FRAMEWORK_DIR = platform.get_package_dir("framework-arduinoespressif32")
+
+
+rc = subprocess.call(
+    [
+         os.path.join(platform.get_package_dir("framework-espidf"), "tools", "idf_tools.py"),
+         "install"
+    ],
+)
+
+if rc != 0:
+    sys.stderr.write("Error: Couldn't execute 'idf_tools.py install' \n")
+
 
 def BeforeUpload(target, source, env):
     upload_options = {}
