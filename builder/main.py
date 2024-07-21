@@ -32,7 +32,7 @@ platform = env.PioPlatform()
 
 FRAMEWORK_DIR = platform.get_package_dir("framework-arduinoespressif32")
 
-idf_toolspy = join(platform.get_package_dir("framework-espidf"), "tools", "idf_tools.py")
+idf_toolspy = join(platform.get_package_dir("tool-esp_install"), "tools", "idf_tools.py")
 idf_toolspy_flag = ["install"]
 idf_toolspy_cmd = [env["PYTHONEXE"], idf_toolspy] + idf_toolspy_flag
 
