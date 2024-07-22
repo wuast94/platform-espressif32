@@ -95,48 +95,53 @@
       "version": "https://github.com/pioarduino/esptool/releases/download/v4.7.5/esptool.zip"
     },
     "tl-install": {
-      "type": "tool",
+      "optional": false,
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/esp_install/releases/download/v1.0.0/esp_install-v1.0.0.zip"
     },
-    "tool-dfuutil-arduino": {
+    "tl-dfuutil": {
       "type": "uploader",
       "optional": true,
-      "owner": "platformio",
-      "version": "~1.11.0"
+      "owner": "pioarduino",
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-dfuutil-arduino.zip"
     },
-    "tool-openocd-esp32": {
+    "tl-openocd": {
       "type": "debugger",
       "optional": true,
-      "owner": "platformio",
-      "version": "~2.1100.0"
+      "owner": "espressif",
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-openocd-esp32.zip"
     },
-    "tool-mklittlefs": {
+    "tl-littlefs320": {
       "type": "uploader",
-      "owner": "tasmota",
-      "version": "^3.2.0"
+      "owner": "pioarduino",
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-mklittlefs_320.zip"
     },
-    "tool-mkfatfs": {
+    "tl-littlefs400": {
+      "type": "uploader",
+      "owner": "pioarduino",
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-mklittlefs_400.zip"
+    },
+    "tl-fatfs": {
       "type": "uploader",
       "optional": true,
-      "owner": "platformio",
-      "version": "~2.0.0"
+      "owner": "pioarduino",
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-mkfatfs.zip"
     },
-    "tool-mkspiffs": {
+    "tl-spiffs": {
       "type": "uploader",
       "optional": true,
-      "owner": "platformio",
-      "version": "~2.230.0"
+      "owner": "pioarduino",
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-mkspiffs.zip"
     },
-    "tool-cmake": {
+    "tl-cmake": {
       "optional": true,
-      "owner": "platformio",
-      "version": "~3.21.0"
+      "owner": "espressif",
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-cmake.zip"
     },
-    "tool-ninja": {
+    "tl-ninja": {
       "optional": true,
-      "owner": "platformio",
-      "version": "^1.7.0"
+      "owner": "espressif",
+      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-ninja.zip"
     }
   }
 }
