@@ -49,7 +49,7 @@ class Espressif32Platform(PlatformBase):
         if variables.get("upload_protocol"):
             self.packages["tool-openocd-esp32"]["optional"] = False
         if os.path.isdir("ulp"):
-            self.packages["toolchain-esp32ulp"]["optional"] = False
+            self.packages["tl-ulp"]["optional"] = False
 
         if "downloadfs" in targets:
             filesystem = variables.get("board_build.filesystem", "littlefs")
@@ -106,12 +106,12 @@ class Espressif32Platform(PlatformBase):
         # Starting from v12, Espressif's toolchains are shipped without
         # bundled GDB. Instead, it's distributed as separate packages for Xtensa
         # and RISC-V targets.
-        for gdb_package in ("tool-xtensa-esp-elf-gdb", "tool-riscv32-esp-elf-gdb"):
+        for gdb_package in ("tl-xt-gdb", "tl-rv-gdb"):
             self.packages[gdb_package]["optional"] = False
 
         # Common packages for IDF and mixed Arduino+IDF projects
         if "espidf" in frameworks:
-            self.packages["toolchain-esp32ulp"]["optional"] = False
+            self.packages["tc-ulp"]["optional"] = False
             for p in self.packages:
                 if p in ("tool-cmake", "tool-ninja"):
                     self.packages[p]["optional"] = False
@@ -120,15 +120,15 @@ class Espressif32Platform(PlatformBase):
 
         for available_mcu in ("esp32", "esp32s2", "esp32s3"):
             if available_mcu == mcu:
-                self.packages["toolchain-xtensa-%s" % mcu]["optional"] = False
+                self.packages["tc-xt-%s" % mcu]["optional"] = False
             else:
-                self.packages.pop("toolchain-xtensa-%s" % available_mcu, None)
+                self.packages.pop("tc-xt-%s" % available_mcu, None)
 
         if mcu in ("esp32s2", "esp32s3", "esp32c2", "esp32c3", "esp32c6", "esp32h2"):
             if mcu in ("esp32c2", "esp32c3", "esp32c6", "esp32h2"):
-                self.packages.pop("toolchain-esp32ulp", None)
+                self.packages.pop("tc-ulp", None)
             # RISC-V based toolchain for ESP32C3, ESP32C6 ESP32S2, ESP32S3 ULP
-            self.packages["toolchain-riscv32-esp"]["optional"] = False
+            self.packages["tc-rv32"]["optional"] = False
 
         return super().configure_default_packages(variables, targets)
 
@@ -308,12 +308,12 @@ class Espressif32Platform(PlatformBase):
                 ("Failed to extract tool dependencies from the remote package file")
             )
 
-        toolchain_remap = {
-            "xtensa-esp32-elf-gcc": "toolchain-xtensa-esp32",
-            "xtensa-esp32s2-elf-gcc": "toolchain-xtensa-esp32s2",
-            "xtensa-esp32s3-elf-gcc": "toolchain-xtensa-esp32s3",
-            "riscv32-esp-elf-gcc": "toolchain-riscv32-esp",
-        }
+#        toolchain_remap = {
+#            "xtensa-esp32-elf-gcc": "toolchain-xtensa-esp32",
+#            "xtensa-esp32s2-elf-gcc": "toolchain-xtensa-esp32s2",
+#            "xtensa-esp32s3-elf-gcc": "toolchain-xtensa-esp32s3",
+#            "riscv32-esp-elf-gcc": "toolchain-riscv32-esp",
+#        }
 
         result = dict()
         for tool in tool_deps:

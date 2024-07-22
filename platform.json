@@ -47,54 +47,54 @@
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/esp-idf/releases/download/v5.1.4.240712/esp-idf-v5.1.4.zip"
     },
-    "toolchain-xtensa-esp32": {
+    "tc-xt-esp32": {
       "type": "toolchain",
       "optional": true,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-xtensa-esp32.zip"
     },
-    "toolchain-xtensa-esp32s2": {
+    "tc-xt-esp32s2": {
       "type": "toolchain",
       "optional": true,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-xtensa-esp32s2.zip"
     },
-    "toolchain-xtensa-esp32s3": {
+    "tc-xt-esp32s3": {
       "type": "toolchain",
       "optional": true,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-xtensa-esp32s3.zip"
     },
-    "toolchain-riscv32-esp": {
+    "tc-rv32": {
       "type": "toolchain",
       "optional": true,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-riscv32-esp.zip"
     },
-    "toolchain-esp32ulp": {
+    "tc-ulp": {
       "type": "toolchain",
       "optional": true,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-esp32ulp.zip"
     },
-      "tool-xtensa-esp-elf-gdb": {
+      "tl-xt-gdb": {
       "type": "debugger",
       "optional": true,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/xtensa-esp-elf-gdb.zip"
     },
-    "tool-riscv32-esp-elf-gdb": {
+    "tl-rv-gdb": {
       "type": "debugger",
       "optional": true,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/riscv32-esp-elf-gdb.zip"
     },
-    "tool-esptoolpy": {
+    "tl-esptool": {
       "type": "uploader",
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/esptool/releases/download/v4.7.5/esptool.zip"
     },
-    "tool-esp_install": {
+    "tl-install": {
       "type": "tool",
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/esp_install/releases/download/v1.0.0/esp_install-v1.0.0.zip"

@@ -32,7 +32,7 @@ platform = env.PioPlatform()
 
 FRAMEWORK_DIR = platform.get_package_dir("framework-arduinoespressif32")
 
-idf_toolspy = join(platform.get_package_dir("tool-esp_install"), "tools", "idf_tools.py")
+idf_toolspy = join(platform.get_package_dir("tl-install"), "tools", "idf_tools.py")
 idf_toolspy_flag = ["install"]
 idf_toolspy_cmd = [env["PYTHONEXE"], idf_toolspy] + idf_toolspy_flag
 
@@ -263,15 +263,15 @@ env.Replace(
     CXX="%s-elf-g++" % toolchain_arch,
     GDB=join(
         platform.get_package_dir(
-            "tool-riscv32-esp-elf-gdb"
+            "tl-rv-gdb"
             if mcu in ("esp32c2", "esp32c3", "esp32c6")
-            else "tool-xtensa-esp-elf-gdb"
+            else "tl-xt-gdb"
         )
         or "",
         "bin",
         "%s-elf-gdb" % toolchain_arch,
     ),
-    OBJCOPY=join(platform.get_package_dir("tool-esptoolpy") or "", "esptool.py"),
+    OBJCOPY=join(platform.get_package_dir("tl-esptool") or "", "esptool.py"),
     RANLIB="%s-elf-gcc-ranlib" % toolchain_arch,
     SIZETOOL="%s-elf-size" % toolchain_arch,
 
@@ -446,7 +446,7 @@ if upload_protocol == "espota":
 elif upload_protocol == "esptool":
     env.Replace(
         UPLOADER=join(
-            platform.get_package_dir("tool-esptoolpy") or "", "esptool.py"),
+            platform.get_package_dir("tl-esptool") or "", "esptool.py"),
         UPLOADERFLAGS=[
             "--chip", mcu,
             "--port", '"$UPLOAD_PORT"',

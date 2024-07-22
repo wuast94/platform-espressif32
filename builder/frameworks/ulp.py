@@ -36,11 +36,11 @@ def prepare_ulp_env_vars(env):
 
     additional_packages = [
         os.path.join(
-            platform.get_package_dir("toolchain-xtensa-%s" % idf_variant),
+            platform.get_package_dir("tc-xt-%s" % idf_variant),
             "bin",
         ),
         os.path.join(
-            platform.get_package_dir("toolchain-esp32ulp"),
+            platform.get_package_dir("tc-ulp"),
             "bin",
         ),
         platform.get_package_dir("tool-ninja"),
@@ -89,7 +89,7 @@ def generate_ulp_config(target_config):
                 "components",
                 "ulp",
                 "cmake",
-                "toolchain-%sulp%s.cmake"
+                "tc-%sulp%s.cmake"
                 % (
                     "" if riscv_ulp_enabled else idf_variant + "-",
                     "-riscv" if riscv_ulp_enabled else "",
