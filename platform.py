@@ -54,9 +54,8 @@ class Espressif32Platform(PlatformBase):
         if "downloadfs" in targets:
             filesystem = variables.get("board_build.filesystem", "littlefs")
             if filesystem == "littlefs":
-                # Use Tasmota mklittlefs v4.0.0 to unpack, older version is incompatible
+                # Use mklittlefs v4.0.0 to unpack, older version is incompatible
                 self.packages["tl-littlefs400"]["optional"] = False
-            else:
                 del self.packages["tl-littlefs320"]
 
         # Currently only Arduino Nano ESP32 uses the dfuutil tool as uploader
