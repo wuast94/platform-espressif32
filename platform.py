@@ -49,7 +49,7 @@ class Espressif32Platform(PlatformBase):
         if variables.get("upload_protocol"):
             self.packages["tool-openocd-esp32"]["optional"] = False
         if os.path.isdir("ulp"):
-            self.packages["tl-ulp"]["optional"] = False
+            self.packages["tc-ulp"]["optional"] = False
 
         if "downloadfs" in targets:
             filesystem = variables.get("board_build.filesystem", "littlefs")
