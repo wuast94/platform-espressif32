@@ -41,13 +41,13 @@ class Espressif32Platform(PlatformBase):
         if "buildfs" in targets:
             filesystem = variables.get("board_build.filesystem", "littlefs")
             if filesystem == "littlefs":
-                self.packages["tool-mklittlefs"]["optional"] = False
+                self.packages["tl-littlefs320"]["optional"] = False
             elif filesystem == "fatfs":
-                self.packages["tool-mkfatfs"]["optional"] = False
+                self.packages["tl-fatfs"]["optional"] = False
             else:
-                self.packages["tool-mkspiffs"]["optional"] = False
+                self.packages["tl-spiffs"]["optional"] = False
         if variables.get("upload_protocol"):
-            self.packages["tool-openocd-esp32"]["optional"] = False
+            self.packages["tl-openocd"]["optional"] = False
         if os.path.isdir("ulp"):
             self.packages["tc-ulp"]["optional"] = False
 
@@ -55,13 +55,15 @@ class Espressif32Platform(PlatformBase):
             filesystem = variables.get("board_build.filesystem", "littlefs")
             if filesystem == "littlefs":
                 # Use Tasmota mklittlefs v4.0.0 to unpack, older version is incompatible
-                self.packages["tool-mklittlefs"]["version"] = "~4.0.0"
+                self.packages["tl-littlefs400"]["optional"] = False
+            else:
+                del self.packages["tl-littlefs320"]
 
         # Currently only Arduino Nano ESP32 uses the dfuutil tool as uploader
         if variables.get("board") == "arduino_nano_esp32":
-            self.packages["tool-dfuutil-arduino"]["optional"] = False
+            self.packages["tl-dfuutil"]["optional"] = False
         else:
-            del self.packages["tool-dfuutil-arduino"]
+            del self.packages["tl-dfuutil"]
 
         build_core = variables.get(
             "board_build.core", board_config.get("build.core", "arduino")
@@ -113,10 +115,8 @@ class Espressif32Platform(PlatformBase):
         if "espidf" in frameworks:
             self.packages["tc-ulp"]["optional"] = False
             for p in self.packages:
-                if p in ("tool-cmake", "tool-ninja"):
+                if p in ("tl-cmake", "tl-ninja"):
                     self.packages[p]["optional"] = False
-#                elif p in ("tool-mconf", "tool-idf") and IS_WINDOWS:
-#                    self.packages[p]["optional"] = False
 
         for available_mcu in ("esp32", "esp32s2", "esp32s3"):
             if available_mcu == mcu:
@@ -218,7 +218,7 @@ class Espressif32Platform(PlatformBase):
 
             debug["tools"][link] = {
                 "server": {
-                    "package": "tool-openocd-esp32",
+                    "package": "tl-openocd",
                     "executable": "bin/openocd",
                     "arguments": server_args,
                 },

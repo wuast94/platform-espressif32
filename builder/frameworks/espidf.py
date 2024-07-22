@@ -243,8 +243,8 @@ def populate_idf_env_vars(idf_env):
     idf_env["IDF_PATH"] = fs.to_unix_path(FRAMEWORK_DIR)
     additional_packages = [
         os.path.join(TOOLCHAIN_DIR, "bin"),
-        platform.get_package_dir("tool-ninja"),
-        os.path.join(platform.get_package_dir("tool-cmake"), "bin"),
+        platform.get_package_dir("tl-ninja"),
+        os.path.join(platform.get_package_dir("tl-cmake"), "bin"),
         os.path.dirname(get_python_exe()),
     ]
 
@@ -252,9 +252,6 @@ def populate_idf_env_vars(idf_env):
         additional_packages.append(
             os.path.join(platform.get_package_dir("tc-ulp"), "bin"),
         )
-
-#    if IS_WINDOWS:
-#        additional_packages.append(platform.get_package_dir("tool-mconf"))
 
     idf_env["PATH"] = os.pathsep.join(additional_packages + [idf_env["PATH"]])
 
@@ -782,7 +779,7 @@ def RunMenuconfig(target, source, env):
 
     rc = subprocess.call(
         [
-            os.path.join(platform.get_package_dir("tool-cmake"), "bin", "cmake"),
+            os.path.join(platform.get_package_dir("tl-cmake"), "bin", "cmake"),
             "--build",
             BUILD_DIR,
             "--target",
@@ -798,7 +795,7 @@ def RunMenuconfig(target, source, env):
 
 def run_cmake(src_dir, build_dir, extra_args=None):
     cmd = [
-        os.path.join(platform.get_package_dir("tool-cmake") or "", "bin", "cmake"),
+        os.path.join(platform.get_package_dir("tl-cmake") or "", "bin", "cmake"),
         "-S",
         src_dir,
         "-B",
@@ -1142,7 +1139,7 @@ def generate_mbedtls_bundle(sdk_config):
             " ".join(
                 [
                     os.path.join(
-                        env.PioPlatform().get_package_dir("tool-cmake"),
+                        env.PioPlatform().get_package_dir("tl-cmake"),
                         "bin",
                         "cmake",
                     ),

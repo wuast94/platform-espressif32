@@ -43,13 +43,11 @@ def prepare_ulp_env_vars(env):
             platform.get_package_dir("tc-ulp"),
             "bin",
         ),
-        platform.get_package_dir("tool-ninja"),
-        os.path.join(platform.get_package_dir("tool-cmake"), "bin"),
+        platform.get_package_dir("tl-ninja"),
+        os.path.join(platform.get_package_dir("tl-cmake"), "bin"),
         os.path.dirname(where_is_program("python")),
     ]
 
-#    if "windows" in get_systype():
-#        additional_packages.append(platform.get_package_dir("tool-mconf"))
 
     for package in additional_packages:
         ulp_env.PrependENVPath("PATH", package)
@@ -81,7 +79,7 @@ def generate_ulp_config(target_config):
         riscv_ulp_enabled = sdk_config.get("ULP_COPROC_TYPE_RISCV", False)
 
         cmd = (
-            os.path.join(platform.get_package_dir("tool-cmake"), "bin", "cmake"),
+            os.path.join(platform.get_package_dir("tl-cmake"), "bin", "cmake"),
             "-DCMAKE_GENERATOR=Ninja",
             "-DCMAKE_TOOLCHAIN_FILE="
             + os.path.join(
@@ -126,7 +124,7 @@ def generate_ulp_config(target_config):
 
 def compile_ulp_binary():
     cmd = (
-        os.path.join(platform.get_package_dir("tool-cmake"), "bin", "cmake"),
+        os.path.join(platform.get_package_dir("tl-cmake"), "bin", "cmake"),
         "--build",
         ULP_BUILD_DIR,
         "--target",
@@ -151,7 +149,7 @@ def compile_ulp_binary():
 
 def generate_ulp_assembly():
     cmd = (
-        os.path.join(platform.get_package_dir("tool-cmake"), "bin", "cmake"),
+        os.path.join(platform.get_package_dir("tl-cmake"), "bin", "cmake"),
         "-DDATA_FILE=$SOURCE",
         "-DSOURCE_FILE=$TARGET",
         "-DFILE_TYPE=BINARY",

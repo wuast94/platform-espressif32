@@ -133,7 +133,7 @@ env.Append(
                 " ".join(
                     [
                         join(
-                            env.PioPlatform().get_package_dir("tool-cmake") or "",
+                            env.PioPlatform().get_package_dir("tl-cmake") or "",
                             "bin",
                             "cmake",
                         ),
