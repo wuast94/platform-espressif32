@@ -133,6 +133,11 @@
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-mkspiffs.zip"
     },
+    "tool-scons": {
+      "optional": false,
+      "owner": "pioarduino",
+      "version": "https://github.com/pioarduino/scons/releases/download/4.7.0/scons-local-4.7.0.tar.gz"
+    },
     "tl-cmake": {
       "optional": true,
       "owner": "espressif",
