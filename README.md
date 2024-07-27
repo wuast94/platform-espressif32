@@ -46,6 +46,7 @@ board = ...
 ```
 
 ### Development version
+espressif Arduino repo branch master and latest compiled Arduino libs
 
 ```ini
 [env:development]
