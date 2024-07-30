@@ -1523,7 +1523,9 @@ libs = find_lib_deps(
 
 # Extra flags which need to be explicitly specified in LINKFLAGS section because SCons
 # cannot merge them correctly
-extra_flags = filter_args(link_args["LINKFLAGS"], ["-T", "-u"])
+extra_flags = filter_args(
+    link_args["LINKFLAGS"], ["-T", "-u", "-Wl,--start-group", "-Wl,--end-group"]
+)
 link_args["LINKFLAGS"] = sorted(list(set(link_args["LINKFLAGS"]) - set(extra_flags)))
 
 # remove the main linker script flags '-T memory.ld'
@@ -1533,19 +1535,6 @@ try:
     extra_flags.pop(ld_index - 1)
 except:
     print("Warning! Couldn't find the main linker script in the CMake code model.")
-
-# remove circle linker commands
-try:
-    link_args_index = link_args["LINKFLAGS"].index("-Wl,--start-group")
-    link_args["LINKFLAGS"].pop(link_args_index)
-except:
-    pass
-
-try:
-    link_args_index = link_args["LINKFLAGS"].index("-Wl,--end-group")
-    link_args["LINKFLAGS"].pop(link_args_index)
-except:
-    pass
 
 #
 # Process project sources
