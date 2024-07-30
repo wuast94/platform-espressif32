@@ -50,13 +50,13 @@
     "toolchain-xtensa-esp-elf": {
       "type": "toolchain",
       "optional": true,
-      "owner": "espressif",
+      "owner": "platformio",
       "version": "13.2.0+20240530"
     },
     "toolchain-riscv32-esp": {
       "type": "toolchain",
       "optional": true,
-      "owner": "espressif",
+      "owner": "platformio",
       "version": "13.2.0+20240530"
     },
     "toolchain-esp32ulp": {
