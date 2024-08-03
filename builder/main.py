@@ -47,7 +47,7 @@ if not os.path.exists(join(IDF_TOOLS_PATH_DEFAULT, "tools")):
     else:
         print("source dir:", join(IDF_TOOLS_PATH_DEFAULT, "tools"))
         print("target dir:", "".join(env.subst("$PROJECT_PACKAGES_DIR")))
-        rc = shutil.copytree(join(IDF_TOOLS_PATH_DEFAULT, "tools"), "".join(env.subst("$PROJECT_PACKAGES_DIR")), symlinks=True, ignore=None, copy_function=copy2, ignore_dangling_symlinks=True, dirs_exist_ok=True)
+        rc = shutil.copytree(join(IDF_TOOLS_PATH_DEFAULT, "tools"), "".join(env.subst("$PROJECT_PACKAGES_DIR")), symlinks=True, ignore=None, ignore_dangling_symlinks=True, dirs_exist_ok=True)
         print("result copytree:", rc)
 
 
