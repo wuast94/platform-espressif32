@@ -15,6 +15,7 @@
 import re
 import sys
 import subprocess
+import os
 from os.path import isfile, isdir, join
 
 from SCons.Script import (
