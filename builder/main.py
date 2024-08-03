@@ -15,7 +15,7 @@
 import re
 import sys
 import subprocess
-from os.path import isfile, join
+from os.path import isfile, isdir, join
 
 from SCons.Script import (
     ARGUMENTS, COMMAND_LINE_TARGETS, AlwaysBuild, Builder, Default,
@@ -32,14 +32,16 @@ platform = env.PioPlatform()
 
 FRAMEWORK_DIR = platform.get_package_dir("framework-arduinoespressif32")
 
-idf_toolspy = join(platform.get_package_dir("tl-install"), "tools", "idf_tools.py")
-idf_toolspy_flag = ["install"]
-idf_toolspy_cmd = [env["PYTHONEXE"], idf_toolspy] + idf_toolspy_flag
+IDF_TOOLS_PATH_DEFAULT = os.path.join("~", ".espressif")
+IDF_TOOLS = join(platform.get_package_dir("tl-install"), "tools", "idf_tools.py")
+IDF_TOOLS_FLAG = ["install"]
+IDF_TOOLS_CMD = [env["PYTHONEXE"], IDF_TOOLS] + IDF_TOOLS_FLAG
 
-rc = subprocess.call(idf_toolspy_cmd)
-
-if rc != 0:
-    sys.stderr.write("Error: Couldn't execute 'idf_tools.py install' \n")
+# IDF Install is needed only one times
+if not os.path.isdir(join(IDF_TOOLS_PATH_DEFAULT, "tools"))
+    rc = subprocess.call(IDF_TOOLS_CMD)
+    if rc != 0:
+        sys.stderr.write("Error: Couldn't execute 'idf_tools.py install' \n")
 
 
 def BeforeUpload(target, source, env):
