@@ -43,6 +43,10 @@ if not os.path.exists(join(IDF_TOOLS_PATH_DEFAULT, "tools")):
     rc = subprocess.call(IDF_TOOLS_CMD)
     if rc != 0:
         sys.stderr.write("Error: Couldn't execute 'idf_tools.py install' \n")
+    else:
+        rc = shutil.copytree(join(IDF_TOOLS_PATH_DEFAULT, "tools"), env.subst("$PROJECT_PACKAGES_DIR"), dirs_exist_ok=True)
+        if rc != 0:
+            sys.stderr.write("Error: Couldn't copy tools and toolchains \n")
 
 
 def BeforeUpload(target, source, env):
