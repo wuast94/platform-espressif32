@@ -38,7 +38,7 @@ IDF_TOOLS_FLAG = ["install"]
 IDF_TOOLS_CMD = [env["PYTHONEXE"], IDF_TOOLS] + IDF_TOOLS_FLAG
 
 # IDF Install is needed only one times
-if not os.path.isdir(join(IDF_TOOLS_PATH_DEFAULT, "tools"))
+if not os.path.isdir(join(IDF_TOOLS_PATH_DEFAULT, "tools")):
     rc = subprocess.call(IDF_TOOLS_CMD)
     if rc != 0:
         sys.stderr.write("Error: Couldn't execute 'idf_tools.py install' \n")
