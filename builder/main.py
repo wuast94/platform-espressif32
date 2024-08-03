@@ -45,7 +45,8 @@ if not os.path.exists(join(IDF_TOOLS_PATH_DEFAULT, "tools")):
     if rc != 0:
         sys.stderr.write("Error: Couldn't execute 'idf_tools.py install' \n")
     else:
-        print("packages dir:", "".join(env.subst("$PROJECT_PACKAGES_DIR")))
+        print("source dir:", join(IDF_TOOLS_PATH_DEFAULT, "tools"))
+        print("target dir:", "".join(env.subst("$PROJECT_PACKAGES_DIR")))
         rc = shutil.copytree(join(IDF_TOOLS_PATH_DEFAULT, "tools"), "".join(env.subst("$PROJECT_PACKAGES_DIR")), dirs_exist_ok=True)
         if rc != 0:
             sys.stderr.write("Error: Couldn't copy tools and toolchains \n")
