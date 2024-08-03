@@ -47,9 +47,8 @@ if not os.path.exists(join(IDF_TOOLS_PATH_DEFAULT, "tools")):
     else:
         print("source dir:", join(IDF_TOOLS_PATH_DEFAULT, "tools"))
         print("target dir:", "".join(env.subst("$PROJECT_PACKAGES_DIR")))
-        rc = shutil.copytree(join(IDF_TOOLS_PATH_DEFAULT, "tools"), "".join(env.subst("$PROJECT_PACKAGES_DIR")), dirs_exist_ok=True)
-        if rc != 0:
-            sys.stderr.write("Error: Couldn't copy tools and toolchains \n")
+        rc = shutil.copytree(join(IDF_TOOLS_PATH_DEFAULT, "tools"), "".join(env.subst("$PROJECT_PACKAGES_DIR")), symlinks=True, copy_function=copy2, ignore_dangling_symlinks=True, dirs_exist_ok=True)
+        print("result copytree:", rc)
 
 
 def BeforeUpload(target, source, env):
