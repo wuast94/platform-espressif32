@@ -14,6 +14,7 @@
 
 import re
 import sys
+import shutil
 import subprocess
 import os
 from os.path import isfile, isdir, join
