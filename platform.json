@@ -49,48 +49,49 @@
     },
     "tc-xt-esp32": {
       "type": "toolchain",
-      "optional": true,
+      "optional": false,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-xtensa-esp32.zip"
     },
     "tc-xt-esp32s2": {
       "type": "toolchain",
-      "optional": true,
+      "optional": false,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-xtensa-esp32s2.zip"
     },
     "tc-xt-esp32s3": {
       "type": "toolchain",
-      "optional": true,
+      "optional": false,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-xtensa-esp32s3.zip"
     },
     "tc-rv32": {
       "type": "toolchain",
-      "optional": true,
+      "optional": false,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-riscv32-esp.zip"
     },
     "tc-ulp": {
       "type": "toolchain",
-      "optional": true,
+      "optional": false,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/toolchain-esp32ulp.zip"
     },
       "tl-xt-gdb": {
       "type": "debugger",
-      "optional": true,
+      "optional": false,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/xtensa-esp-elf-gdb.zip"
     },
     "tl-rv-gdb": {
       "type": "debugger",
-      "optional": true,
+      "optional": false,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/riscv32-esp-elf-gdb.zip"
     },
     "tl-esptool": {
       "type": "uploader",
+      "optional": false,
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/esptool/releases/download/v4.7.5/esptool.zip"
     },
@@ -101,35 +102,37 @@
     },
     "tl-dfuutil": {
       "type": "uploader",
-      "optional": true,
+      "optional": false,
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-dfuutil-arduino.zip"
     },
     "tl-openocd": {
       "type": "debugger",
-      "optional": true,
+      "optional": false,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-openocd-esp32.zip"
     },
     "tl-littlefs320": {
       "type": "uploader",
+      "optional": false,
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-mklittlefs_320.zip"
     },
     "tl-littlefs400": {
       "type": "uploader",
+      "optional": false,
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-mklittlefs_400.zip"
     },
     "tl-fatfs": {
       "type": "uploader",
-      "optional": true,
+      "optional": false,
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-mkfatfs.zip"
     },
     "tl-spiffs": {
       "type": "uploader",
-      "optional": true,
+      "optional": false,
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-mkspiffs.zip"
     },
@@ -139,12 +142,12 @@
       "version": "https://github.com/pioarduino/scons/releases/download/4.7.0/scons-local-4.7.0.tar.gz"
     },
     "tl-cmake": {
-      "optional": true,
+      "optional": false,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-cmake.zip"
     },
     "tl-ninja": {
-      "optional": true,
+      "optional": false,
       "owner": "espressif",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/tool-ninja.zip"
     }
