@@ -18,7 +18,7 @@
     "type": "git",
     "url": "https://github.com/pioarduino/platform-espressif32.git"
   },
-  "version": "51.03.03",
+  "version": "51.03.04",
   "frameworks": {
     "arduino": {
       "script": "builder/frameworks/arduino.py"
@@ -33,19 +33,19 @@
       "type": "framework",
       "optional": true,
       "owner": "espressif",
-      "version": "https://github.com/espressif/arduino-esp32/releases/download/3.0.3/esp32-3.0.3.zip"
+      "version": "https://github.com/espressif/arduino-esp32/releases/download/3.0.4/esp32-3.0.3.zip"
     },
     "framework-arduinoespressif32-libs": {
       "type": "framework",
       "optional": true,
       "owner": "espressif",
-      "version": "https://github.com/espressif/arduino-esp32/releases/download/3.0.3/esp32-arduino-libs-3.0.3.zip"
+      "version": "https://github.com/espressif/arduino-esp32/releases/download/3.0.4/esp32-arduino-libs-3.0.3.zip"
     },
     "framework-espidf": {
       "type": "framework",
       "optional": true,
       "owner": "pioarduino",
-      "version": "https://github.com/pioarduino/esp-idf/releases/download/v5.1.4.240712/esp-idf-v5.1.4.zip"
+      "version": "https://github.com/pioarduino/esp-idf/releases/download/v5.1.4.240801/esp-idf-v5.1.4.zip"
     },
     "tc-xt-esp32": {
       "type": "toolchain",
@@ -97,7 +97,7 @@
     "tl-install": {
       "optional": false,
       "owner": "pioarduino",
-      "version": "https://github.com/pioarduino/esp_install/releases/download/v1.1.0/esp_install-v1.1.0.zip"
+      "version": "https://github.com/pioarduino/esp_install/releases/download/v1.2.0/esp_install-v1.2.0.zip"
     },
     "tl-dfuutil": {
       "type": "uploader",
