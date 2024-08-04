@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+import subprocess
 import urllib
 import sys
 import json
@@ -21,10 +22,14 @@ import requests
 from os.path import isfile, isdir, join
 
 from platformio.public import PlatformBase, to_unix_path
+from platformio.proc import get_pythonexe_path
 
-
+python_exe = get_pythonexe_path()
 IS_WINDOWS = sys.platform.startswith("win")
 IDF_TOOLS_PATH_DEFAULT = os.path.join(os.path.expanduser("~"), ".espressif")
+IDF_TOOLS = os.path.join(os.path.expanduser("~"), ".platformio", "packages", "tl-install", "tools", "idf_tools.py")
+IDF_TOOLS_FLAG = ["install"]
+IDF_TOOLS_CMD = [python_exe, IDF_TOOLS] + IDF_TOOLS_FLAG
 
 
 class Espressif32Platform(PlatformBase):
@@ -35,6 +40,14 @@ class Espressif32Platform(PlatformBase):
         board_config = self.board_config(variables.get("board"))
         mcu = variables.get("board_build.mcu", board_config.get("build.mcu", "esp32"))
         frameworks = variables.get("pioframework", [])
+
+        self.packages["tl-install"]["optional"] = False
+
+        # IDF Install is needed only one time
+        if not os.path.exists(join(IDF_TOOLS_PATH_DEFAULT, "tools")):
+            rc = subprocess.call(IDF_TOOLS_CMD)
+            if rc != 0:
+                sys.stderr.write("Error: Couldn't execute 'idf_tools.py install' \n")
 
 
         if "arduino" in frameworks:
@@ -87,7 +100,9 @@ class Espressif32Platform(PlatformBase):
         for gdb_package in ("tl-xt-gdb", "tl-rv-gdb"):
             self.packages[gdb_package]["optional"] = False
             tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", gdb_package)
-            self.packages[gdb_package]["version"] = tl_path
+#            print("gdb path:", tl_path)
+            if os.path.exists(tl_path):
+                self.packages[gdb_package]["version"] = tl_path
 
         # Common packages for IDF and mixed Arduino+IDF projects
         if "espidf" in frameworks:
@@ -114,7 +129,9 @@ class Espressif32Platform(PlatformBase):
             # RISC-V based toolchain for ESP32C3, ESP32C6 ESP32S2, ESP32S3 ULP
             self.packages["tc-rv32"]["optional"] = False
             rv32_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-rv32")
-            self.packages["tc-rv32"]["version"] = rv32_path
+            if os.path.exists(rv32_path):
+                self.packages["tc-rv32"]["owner"] = "espressif"
+                self.packages["tc-rv32"]["version"] = rv32_path
 
         return super().configure_default_packages(variables, targets)
 
