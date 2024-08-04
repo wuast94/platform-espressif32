@@ -97,11 +97,10 @@ class Espressif32Platform(PlatformBase):
         # Starting from v12, Espressif's toolchains are shipped without
         # bundled GDB. Instead, it's distributed as separate packages for Xtensa
         # and RISC-V targets.
-        for gdb_package in ("tl-xt-gdb", "tl-rv-gdb"):
-            self.packages[gdb_package]["optional"] = False
-            tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", gdb_package)
-#            print("gdb path:", tl_path)
-            if os.path.exists(tl_path):
+        if os.path.exists(IDF_TOOLS):
+            for gdb_package in ("tl-xt-gdb", "tl-rv-gdb"):
+                tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", gdb_package)
+                self.packages[gdb_package]["optional"] = False
                 self.packages[gdb_package]["version"] = tl_path
 
         # Common packages for IDF and mixed Arduino+IDF projects
@@ -127,10 +126,9 @@ class Espressif32Platform(PlatformBase):
             if mcu in ("esp32c2", "esp32c3", "esp32c6", "esp32h2"):
                 self.packages.pop("tc-ulp", None)
             # RISC-V based toolchain for ESP32C3, ESP32C6 ESP32S2, ESP32S3 ULP
-            self.packages["tc-rv32"]["optional"] = False
-            rv32_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-rv32")
-            if os.path.exists(rv32_path):
-                self.packages["tc-rv32"]["owner"] = "espressif"
+            if os.path.exists(IDF_TOOLS):
+                rv32_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-rv32")
+                self.packages["tc-rv32"]["optional"] = False
                 self.packages["tc-rv32"]["version"] = rv32_path
 
         return super().configure_default_packages(variables, targets)
