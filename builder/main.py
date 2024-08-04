@@ -39,16 +39,11 @@ IDF_TOOLS = join(platform.get_package_dir("tl-install"), "tools", "idf_tools.py"
 IDF_TOOLS_FLAG = ["install"]
 IDF_TOOLS_CMD = [env["PYTHONEXE"], IDF_TOOLS] + IDF_TOOLS_FLAG
 
-# IDF Install is needed only one times
+# IDF Install is needed only one time
 if not os.path.exists(join(IDF_TOOLS_PATH_DEFAULT, "tools")):
     rc = subprocess.call(IDF_TOOLS_CMD)
     if rc != 0:
         sys.stderr.write("Error: Couldn't execute 'idf_tools.py install' \n")
-    else:
-        print("source dir:", join(IDF_TOOLS_PATH_DEFAULT, "tools"))
-        print("target dir:", "".join(env.subst("$PROJECT_PACKAGES_DIR")))
-        rc = shutil.copytree(join(IDF_TOOLS_PATH_DEFAULT, "tools"), "".join(env.subst("$PROJECT_PACKAGES_DIR")), symlinks=True, ignore=None, ignore_dangling_symlinks=True, dirs_exist_ok=True)
-        print("result copytree:", rc)
 
 
 def BeforeUpload(target, source, env):

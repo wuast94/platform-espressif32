@@ -18,11 +18,13 @@ import sys
 import json
 import re
 import requests
+from os.path import isfile, isdir, join
 
 from platformio.public import PlatformBase, to_unix_path
 
 
 IS_WINDOWS = sys.platform.startswith("win")
+IDF_TOOLS_PATH_DEFAULT = os.path.join(os.path.expanduser("~"), ".espressif")
 
 
 class Espressif32Platform(PlatformBase):
@@ -34,7 +36,6 @@ class Espressif32Platform(PlatformBase):
         mcu = variables.get("board_build.mcu", board_config.get("build.mcu", "esp32"))
         frameworks = variables.get("pioframework", [])
 
-        self.packages["tool-scons"]["optional"] = False
 
         if "arduino" in frameworks:
             self.packages["framework-arduinoespressif32"]["optional"] = False
@@ -44,25 +45,39 @@ class Espressif32Platform(PlatformBase):
             filesystem = variables.get("board_build.filesystem", "littlefs")
             if filesystem == "littlefs":
                 self.packages["tl-littlefs320"]["optional"] = False
+                tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tl-littlefs320")
+                self.packages["tl-littlefs320"]["version"] = tl_path
             elif filesystem == "fatfs":
                 self.packages["tl-fatfs"]["optional"] = False
+                tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tl-fatfs")
+                self.packages["tl-fatfs"]["version"] = tl_path
             else:
                 self.packages["tl-spiffs"]["optional"] = False
+                tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tl-spiffs")
+                self.packages["tl-spiffs"]["version"] = tl_path
         if variables.get("upload_protocol"):
             self.packages["tl-openocd"]["optional"] = False
+            tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tl-openocd")
+            self.packages["tl-openocd"]["version"] = tl_path
         if os.path.isdir("ulp"):
             self.packages["tc-ulp"]["optional"] = False
+            ulp_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-ulp")
+            self.packages["tc-ulp"]["version"] = ulp_path
 
         if "downloadfs" in targets:
             filesystem = variables.get("board_build.filesystem", "littlefs")
             if filesystem == "littlefs":
                 # Use mklittlefs v4.0.0 to unpack, older version is incompatible
                 self.packages["tl-littlefs400"]["optional"] = False
+                tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tl-littlefs400")
+                self.packages["tl-littlefs400"]["version"] = tl_path
                 del self.packages["tl-littlefs320"]
 
         # Currently only Arduino Nano ESP32 uses the dfuutil tool as uploader
         if variables.get("board") == "arduino_nano_esp32":
             self.packages["tl-dfuutil"]["optional"] = False
+            tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tl-dfuutil")
+            self.packages["tl-dfuutil"]["version"] = tl_path
         else:
             del self.packages["tl-dfuutil"]
 
@@ -71,17 +86,25 @@ class Espressif32Platform(PlatformBase):
         # and RISC-V targets.
         for gdb_package in ("tl-xt-gdb", "tl-rv-gdb"):
             self.packages[gdb_package]["optional"] = False
+            tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", gdb_package)
+            self.packages[gdb_package]["version"] = tl_path
 
         # Common packages for IDF and mixed Arduino+IDF projects
         if "espidf" in frameworks:
             self.packages["tc-ulp"]["optional"] = False
+            ulp_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-ulp")
+            self.packages["tc-ulp"]["version"] = ulp_path
             for p in self.packages:
                 if p in ("tl-cmake", "tl-ninja"):
                     self.packages[p]["optional"] = False
+                    tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", p)
+                    self.packages[p]["version"] = tl_path
 
         for available_mcu in ("esp32", "esp32s2", "esp32s3"):
             if available_mcu == mcu:
                 self.packages["tc-xt-%s" % mcu]["optional"] = False
+                tc_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-xt-%s" % mcu)
+                self.packages["tc-xt-%s" % mcu]["version"] = tc_path
             else:
                 self.packages.pop("tc-xt-%s" % available_mcu, None)
 
@@ -90,6 +113,8 @@ class Espressif32Platform(PlatformBase):
                 self.packages.pop("tc-ulp", None)
             # RISC-V based toolchain for ESP32C3, ESP32C6 ESP32S2, ESP32S3 ULP
             self.packages["tc-rv32"]["optional"] = False
+            rv32_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-rv32")
+            self.packages["tc-rv32"]["version"] = rv32_path
 
         return super().configure_default_packages(variables, targets)
 
