@@ -113,21 +113,25 @@
       "version": ""
     },
     "tool-mklittlefs": {
+      "type": "uploader",
       "optional": true,
       "owner": "",
       "version": ""
     },
     "tool-mklittlefs400": {
+      "type": "uploader",
       "optional": true,
       "owner": "",
       "version": ""
     },
     "tool-mkfatfs": {
+      "type": "uploader",
       "optional": true,
       "owner": "",
       "version": ""
     },
     "tool-mkspiffs": {
+      "type": "uploader",
       "optional": true,
       "owner": "",
       "version": ""

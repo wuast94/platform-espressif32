@@ -499,7 +499,7 @@ elif upload_protocol == "dfu":
 
     env.Replace(
         UPLOADER=join(
-            platform.get_package_dir("tl-dfuutil") or "", "dfu-util"
+            platform.get_package_dir("tool-dfuutil") or "", "dfu-util"
         ),
         UPLOADERFLAGS=[
             "-d",
