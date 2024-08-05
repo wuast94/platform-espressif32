@@ -98,7 +98,7 @@
     "tl-install": {
       "optional": false,
       "owner": "pioarduino",
-      "version": "https://github.com/pioarduino/esp_install/releases/download/v1.4.0/esp_install-v1.4.0.zip"
+      "version": "https://github.com/pioarduino/esp_install/releases/download/v1.5.0/esp_install-v1.5.0.zip"
     },
     "tool-dfuutil": {
       "type": "uploader",

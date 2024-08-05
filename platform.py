@@ -28,7 +28,7 @@ from platformio.proc import get_pythonexe_path
 python_exe = get_pythonexe_path()
 IS_WINDOWS = sys.platform.startswith("win")
 IDF_TOOLS_PATH_DEFAULT = os.path.join(os.path.expanduser("~"), ".espressif")
-IDF_TOOLS = os.path.join(os.path.expanduser("~"), ".platformio", "packages", "tool-install", "tools", "idf_tools.py")
+IDF_TOOLS = os.path.join(os.path.expanduser("~"), ".platformio", "packages", "tl-install", "tools", "idf_tools.py")
 IDF_TOOLS_FLAG = ["install"]
 IDF_TOOLS_CMD = [python_exe, IDF_TOOLS] + IDF_TOOLS_FLAG
 
