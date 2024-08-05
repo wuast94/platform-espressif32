@@ -115,25 +115,25 @@
     "tl-littlefs320": {
       "type": "uploader",
       "optional": true,
-      "owner": "pioarduino",
+      "owner": "",
       "version": ""
     },
     "tl-littlefs400": {
       "type": "uploader",
       "optional": true,
-      "owner": "pioarduino",
+      "owner": "",
       "version": ""
     },
     "tl-fatfs": {
       "type": "uploader",
       "optional": true,
-      "owner": "pioarduino",
+      "owner": "",
       "version": ""
     },
     "tl-spiffs": {
       "type": "uploader",
       "optional": true,
-      "owner": "pioarduino",
+      "owner": "",
       "version": ""
     },
     "tl-cmake": {
