@@ -19,6 +19,7 @@ import sys
 import json
 import re
 import requests
+import shutil
 from os.path import isfile, isdir, join
 
 from platformio.public import PlatformBase, to_unix_path
@@ -44,10 +45,12 @@ class Espressif32Platform(PlatformBase):
         self.packages["tl-install"]["optional"] = False
 
         # IDF Install is needed only one time
-        if not os.path.exists(join(IDF_TOOLS_PATH_DEFAULT, "tools")):
+        if not os.path.exists(join(IDF_TOOLS_PATH_DEFAULT, "tools")) and os.path.exists(IDF_TOOLS):
             rc = subprocess.call(IDF_TOOLS_CMD)
             if rc != 0:
                 sys.stderr.write("Error: Couldn't execute 'idf_tools.py install' \n")
+            else:
+                shutil.copytree(join(IDF_TOOLS_PATH_DEFAULT, "tools", "tl-packages"), join(IDF_TOOLS_PATH_DEFAULT, "tools"), symlinks=False, ignore=None, ignore_dangling_symlinks=False, dirs_exist_ok=True)
 
 
         if "arduino" in frameworks:
