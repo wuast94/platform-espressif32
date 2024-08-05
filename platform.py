@@ -76,7 +76,7 @@ class Espressif32Platform(PlatformBase):
             self.packages["tool-openocd"]["optional"] = False
             self.packages["tool-openocd"]["version"] = tl_path
 
-        if os.path.isdir("ulp"):
+        if os.path.isdir("ulp") and os.path.exists(IDF_TOOLS):
             ulp_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-ulp")
             self.packages["tc-ulp"]["optional"] = False
             self.packages["tc-ulp"]["version"] = ulp_path
@@ -108,7 +108,7 @@ class Espressif32Platform(PlatformBase):
                 self.packages[gdb_package]["version"] = tl_path
 
         # Common packages for IDF and mixed Arduino+IDF projects
-        if "espidf" in frameworks:
+        if "espidf" in frameworks and os.path.exists(IDF_TOOLS):
             ulp_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-ulp")
             self.packages["tc-ulp"]["optional"] = False
             self.packages["tc-ulp"]["version"] = ulp_path
