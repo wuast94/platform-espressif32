@@ -119,7 +119,7 @@ class Espressif32Platform(PlatformBase):
                     self.packages[p]["version"] = tl_path
 
         for available_mcu in ("esp32", "esp32s2", "esp32s3"):
-            if available_mcu == mcu:
+            if available_mcu == mcu and os.path.exists(IDF_TOOLS):
                 tc_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-xt-%s" % mcu)
                 self.packages["tc-xt-%s" % mcu]["optional"] = False
                 self.packages["tc-xt-%s" % mcu]["version"] = tc_path
