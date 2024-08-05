@@ -89,7 +89,7 @@
       "owner": "",
       "version": ""
     },
-    "tl-esptool": {
+    "tool-esptool": {
       "type": "uploader",
       "optional": false,
       "owner": "pioarduino",
@@ -100,48 +100,44 @@
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/esp_install/releases/download/v1.4.0/esp_install-v1.4.0.zip"
     },
-    "tl-dfuutil": {
+    "tool-dfuutil": {
       "type": "uploader",
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tl-openocd": {
+    "tool-openocd": {
       "type": "debugger",
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tl-littlefs320": {
-      "type": "uploader",
+    "tool-mklittlefs": {
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tl-littlefs400": {
-      "type": "uploader",
+    "tool-mklittlefs400": {
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tl-fatfs": {
-      "type": "uploader",
+    "tool-mkfatfs": {
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tl-spiffs": {
-      "type": "uploader",
+    "tool-mkspiffs": {
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tl-cmake": {
+    "tool-cmake": {
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tl-ninja": {
+    "tool-ninja": {
       "optional": true,
       "owner": "",
       "version": ""
