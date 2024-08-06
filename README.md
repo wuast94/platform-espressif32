@@ -2,6 +2,7 @@
 # Fork of Platformio Espressif 32: development platform for [PlatformIO](https://platformio.org)
 
 [![Build Status](https://github.com/pioarduino/platform-espressif32/workflows/Examples/badge.svg)](https://github.com/pioarduino/platform-espressif32/actions)
+[![Discord](https://img.shields.io/discord/1263397951829708871.svg?logo=discord&logoColor=white&color=5865F2&label=Discord)](https://discord.gg/Nutz9crnZr)
 [![GitHub Releases](https://img.shields.io/github/downloads/pioarduino/platform-espressif32/total?label=downloads)](https://github.com/pioarduino/platform-espressif32/releases/latest)
 
 > [!NOTE]  
@@ -26,25 +27,26 @@ ESP32 is a series of low-cost, low-power system on a chip microcontrollers with 
 - Search for the official `platformio ide` extension.
 - Install PlatformIO IDE extension.
 
-![image](https://github.com/user-attachments/assets/9549991b-6a8b-4d77-ad9f-3b08873d7e30)
+![image](idesetup.png)
 
 # Usage
 1. Setup new VSCode PlatformIO project.
 1. Configure a platform option in [platformio.ini](https://docs.platformio.org/page/projectconf.html) file:
 
 ### Stable version
-espressif Arduino 3.0.3 and IDF 5.1.4
+espressif Arduino 3.0.4 and IDF 5.1.4
 
 See `platform` [documentation](https://docs.platformio.org/en/latest/projectconf/sections/env/options/platform/platform.html#projectconf-env-platform) for details.
 
 ```ini
 [env:stable]
-platform = https://github.com/pioarduino/platform-espressif32/releases/download/51.03.03/platform-espressif32.zip
+platform = https://github.com/pioarduino/platform-espressif32/releases/download/51.03.04/platform-espressif32.zip
 board = ...
 ...
 ```
 
 ### Development version
+espressif Arduino repo branch master and latest compiled Arduino libs
 
 ```ini
 [env:development]
