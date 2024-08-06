@@ -45,12 +45,12 @@ board = ...
 ...
 ```
 
-### Development version
+### Development version using espressif installer (no registry use)
 espressif Arduino repo branch master and latest compiled Arduino libs
 
 ```ini
 [env:development]
-platform = https://github.com/pioarduino/platform-espressif32.git#develop
+platform = https://github.com/pioarduino/platform-espressif32.git#poc_idf_installer
 board = ...
 ...
 ```
