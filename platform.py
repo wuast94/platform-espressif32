@@ -128,7 +128,6 @@ class Espressif32Platform(PlatformBase):
                 tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", gdb_package)
                 self.packages[gdb_package]["optional"] = False
                 self.packages[gdb_package]["version"] = tl_path
-                self.packages.pop["tl-install", None]
 
         # Common packages for IDF and mixed Arduino+IDF projects
         if "espidf" in frameworks and os.path.exists(IDF_TOOLS):
