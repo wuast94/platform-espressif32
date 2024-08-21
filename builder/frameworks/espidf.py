@@ -53,12 +53,14 @@ if os.environ.get("PYTHONPATH"):
 env = DefaultEnvironment()
 env.SConscript("_embed_files.py", exports="env")
 
+# Allow changes in folders of managed components
+os.environ["IDF_COMPONENT_OVERWRITE_MANAGED_COMPONENTS"] = "1"
+
 platform = env.PioPlatform()
 board = env.BoardConfig()
 mcu = board.get("build.mcu", "esp32")
 idf_variant = mcu.lower()
 
-# Required until Arduino switches to v5
 IDF5 = (
     platform.get_package_version("framework-espidf")
     .split(".")[1]
@@ -655,7 +657,8 @@ def generate_project_ld_script(sdk_config, ignore_targets=None):
         "sections.ld.in",
     )
 
-    if IDF5:
+    framework_version = [int(v) for v in get_framework_version().split(".")]
+    if framework_version[:2] > [5, 2]:
         initial_ld_script = preprocess_linker_file(
             initial_ld_script,
             os.path.join(
@@ -1257,7 +1260,7 @@ def install_python_deps():
         "future": ">=0.18.3",
         "pyparsing": ">=3.1.0,<4" if IDF5 else ">=2.0.3,<2.4.0",
         "kconfiglib": "~=14.1.0" if IDF5 else "~=13.7.1",
-        "idf-component-manager": "~=1.5.2" if IDF5 else "~=1.0",
+        "idf-component-manager": "~=2.0.1" if IDF5 else "~=1.0",
         "esp-idf-kconfig": ">=1.4.2,<2.0.0"
     }
 
@@ -1414,7 +1417,8 @@ if not board.get("build.ldscript", ""):
         "memory.ld.in",
     ))
 
-    if IDF5:
+    framework_version = [int(v) for v in get_framework_version().split(".")]
+    if framework_version[:2] > [5, 2]:
         initial_ld_script = preprocess_linker_file(
             initial_ld_script,
             os.path.join(
