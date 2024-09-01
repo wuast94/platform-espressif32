@@ -14,47 +14,22 @@
 
 import re
 import sys
-import shutil
-import subprocess
-import os
-from os.path import isfile, isdir, join
+from os.path import isfile, join
 
 from SCons.Script import (
     ARGUMENTS, COMMAND_LINE_TARGETS, AlwaysBuild, Builder, Default,
     DefaultEnvironment)
 
 from platformio.util import get_serial_ports
-from platformio.proc import exec_command, where_is_program
 
-pio_exe = where_is_program("platformio")
 env = DefaultEnvironment()
 platform = env.PioPlatform()
-board = env.BoardConfig()
-mcu = board.get("build.mcu", "esp32")
 
 #
 # Helpers
 #
 
-PLATFORM_PATH = env.GetProjectOption("platform")
-PLATFORM_CMD = (
-    pio_exe,
-    "pkg",
-    "install",
-    "--global",
-    "--platform",
-    PLATFORM_PATH,
-)
-
-# install platform again to install missing packages, needed since no registry install
-if bool(platform.get_package_dir("tc-%s" % ("rv32" if mcu in ("esp32c2", "esp32c3", "esp32c6", "esp32h2") else ("xt-%s" % mcu)))) == False:
-    result = exec_command(PLATFORM_CMD)
-    if result["returncode"] != 0:
-        sys.stderr.write(result["err"] + "\n")
-        env.Exit(1)
-
 FRAMEWORK_DIR = platform.get_package_dir("framework-arduinoespressif32")
-
 
 def BeforeUpload(target, source, env):
     upload_options = {}
@@ -277,15 +252,15 @@ env.Replace(
     CXX="%s-elf-g++" % toolchain_arch,
     GDB=join(
         platform.get_package_dir(
-            "tl-rv-gdb"
+            "riscv32-esp-elf-gdb"
             if mcu in ("esp32c2", "esp32c3", "esp32c6")
-            else "tl-xt-gdb"
+            else "xtensa-esp-elf-gdb"
         )
         or "",
         "bin",
         "%s-elf-gdb" % toolchain_arch,
     ),
-    OBJCOPY=join(platform.get_package_dir("tool-esptool") or "", "esptool.py"),
+    OBJCOPY=join(platform.get_package_dir("tool-esptoolpy") or "", "esptool.py"),
     RANLIB="%s-elf-gcc-ranlib" % toolchain_arch,
     SIZETOOL="%s-elf-size" % toolchain_arch,
 
@@ -460,7 +435,7 @@ if upload_protocol == "espota":
 elif upload_protocol == "esptool":
     env.Replace(
         UPLOADER=join(
-            platform.get_package_dir("tool-esptool") or "", "esptool.py"),
+            platform.get_package_dir("tool-esptoolpy") or "", "esptool.py"),
         UPLOADERFLAGS=[
             "--chip", mcu,
             "--port", '"$UPLOAD_PORT"',
@@ -553,7 +528,7 @@ elif upload_protocol in debug_tools:
         f.replace(
             "$PACKAGE_DIR",
             _to_unix_slashes(
-                platform.get_package_dir("tl-openocd") or ""))
+                platform.get_package_dir("tool-openocd") or ""))
         for f in openocd_args
     ]
     env.Replace(

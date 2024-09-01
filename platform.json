@@ -47,49 +47,49 @@
       "owner": "pioarduino",
       "version": "https://github.com/pioarduino/esp-idf/releases/download/v5.1.4.240805/esp-idf-v5.1.4.zip"
     },
-    "tc-xt-esp32": {
+    "toolchain-xtensa-esp32": {
       "type": "toolchain",
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tc-xt-esp32s2": {
+    "toolchain-xtensa-esp32s2": {
       "type": "toolchain",
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tc-xt-esp32s3": {
+    "toolchain-xtensa-esp32s3": {
       "type": "toolchain",
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tc-rv32": {
+    "toolchain-riscv32-esp": {
       "type": "toolchain",
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tc-ulp": {
+    "toolchain-esp32ulp": {
       "type": "toolchain",
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tl-xt-gdb": {
+    "xtensa-esp-elf-gdb": {
       "type": "debugger",
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tl-rv-gdb": {
+    "riscv32-esp-elf-gdb": {
       "type": "debugger",
       "optional": true,
       "owner": "",
       "version": ""
     },
-    "tool-esptool": {
+    "tool-esptoolpy": {
       "type": "uploader",
       "optional": false,
       "owner": "pioarduino",
@@ -158,12 +158,12 @@
     "contrib-piohome": {
       "optional": true,
       "owner": "",
-      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/contrib-piohome-3.4.4.tar.gz"
+      "version": ""
     },
     "contrib-pioremote": {
       "optional": true,
       "owner": "",
-      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/contrib-pioremote-1.0.1.tar.gz"
+      "version": ""
     }
   }
 }

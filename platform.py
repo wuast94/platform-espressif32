@@ -21,13 +21,30 @@ from os.path import isfile, join
 from platformio.public import PlatformBase, to_unix_path
 from platformio.proc import get_pythonexe_path
 from platformio.project.config import ProjectConfig
+from platformio.package.manager.tool import ToolPackageManager
 
 python_exe = get_pythonexe_path()
+pm = ToolPackageManager()
 
 IDF_TOOLS_PATH_DEFAULT = os.path.join(os.path.expanduser("~"), ".espressif")
 IDF_TOOLS = os.path.join(ProjectConfig.get_instance().get("platformio", "packages_dir"), "tl-install", "tools", "idf_tools.py")
-IDF_TOOLS_FLAG = ["install"]
-IDF_TOOLS_CMD = [python_exe, IDF_TOOLS] + IDF_TOOLS_FLAG
+IDF_TOOLS_CMD = (
+    python_exe,
+    IDF_TOOLS,
+    "install",
+)
+
+# IDF Install is needed only one time
+tl_flag = bool(os.path.exists(IDF_TOOLS))
+if (tl_flag and not bool(os.path.exists(join(IDF_TOOLS_PATH_DEFAULT, "tools")))):
+    rc = subprocess.call(IDF_TOOLS_CMD)
+    if rc != 0:
+        sys.stderr.write("Error: Couldn't execute 'idf_tools.py install'\n")
+    else:
+        shutil.copytree(join(IDF_TOOLS_PATH_DEFAULT, "tools", "tool-packages"), join(IDF_TOOLS_PATH_DEFAULT, "tools"), symlinks=False, ignore=None, ignore_dangling_symlinks=False, dirs_exist_ok=True)
+        for p in ("tool-mklittlefs", "tool-mkfatfs", "tool-mkspiffs", "tool-dfuutil", "tool-openocd", "tool-cmake", "tool-ninja", "tool-cppcheck", "tool-clangtidy", "tool-pvs-studio", "tc-xt-esp32", "tc-xt-esp32s2", "tc-xt-esp32s3",  "tc-ulp", "tc-rv32", "tl-xt-gdb", "tl-rv-gdb", "contrib-piohome", "contrib-pioremote"):
+            tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", p)
+            pm.install(tl_path)
 
 class Espressif32Platform(PlatformBase):
     def configure_default_packages(self, variables, targets):
@@ -37,48 +54,16 @@ class Espressif32Platform(PlatformBase):
         board_config = self.board_config(variables.get("board"))
         mcu = variables.get("board_build.mcu", board_config.get("build.mcu", "esp32"))
         frameworks = variables.get("pioframework", [])
-        tl_flag = bool(os.path.exists(IDF_TOOLS))
-
-        # IDF Install is needed only one time
-        if not os.path.exists(join(IDF_TOOLS_PATH_DEFAULT, "tools")) and tl_flag:
-            rc = subprocess.call(IDF_TOOLS_CMD)
-            if rc != 0:
-                sys.stderr.write("Error: Couldn't execute 'idf_tools.py install'\n")
-            else:
-                shutil.copytree(join(IDF_TOOLS_PATH_DEFAULT, "tools", "tool-packages"), join(IDF_TOOLS_PATH_DEFAULT, "tools"), symlinks=False, ignore=None, ignore_dangling_symlinks=False, dirs_exist_ok=True)
-
-        if tl_flag:
-            # install tool is not needed anymore
-            self.packages["tl-install"]["optional"] = True
-            # Install all tools and toolchains
-            for p in self.packages:
-                if p in ("tool-mklittlefs", "tool-mkfatfs", "tool-mkspiffs", "tool-dfuutil", "tool-openocd", "tool-cmake", "tool-ninja", "tool-cppcheck", "tool-clangtidy", "tool-pvs-studio", "contrib-piohome", "contrib-pioremote", "tc-ulp", "tc-rv32", "tl-xt-gdb", "tl-rv-gdb"):
-                    tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", p)
-                    self.packages[p]["optional"] = False
-                    self.packages[p]["version"] = tl_path
-            # Enable common packages for IDF and mixed Arduino+IDF projects
-            for p in self.packages:
-                if p in ("tool-cmake", "tool-ninja", "tc-ulp"):
-                    self.packages[p]["optional"] = False if "espidf" in frameworks else True
-            # Enabling of following tools is not needed, installing is enough
-            for p in self.packages:
-                if p in ("contrib-pioremote", "contrib-piohome"):
-                    try:
-                        pkg_dir = pm.get_package(p).path
-                        # When package is not found an execption happens -> install is forced
-                        # else the are removed from current env
-                        self.packages[p]["optional"] = True
-                    except:
-                        pass
-
 
         # Enable debug tool gdb only when build debug is enabled
-        if variables.get("build_type") or  "debug" in "".join(targets):
-            self.packages["tl-rv-gdb"]["optional"] = False if mcu in ["esp32c2", "esp32c3", "esp32c6", "esp32h2"] else True
-            self.packages["tl-xt-gdb"]["optional"] = False if not mcu in ["esp32c2", "esp32c3", "esp32c6", "esp32h2"] else True
+        if (variables.get("build_type") or "debug" in "".join(targets)) and tl_flag:
+            self.packages["riscv32-esp-elf-gdb"]["optional"] = False if mcu in ["esp32c2", "esp32c3", "esp32c6", "esp32h2"] else True
+            self.packages["riscv32-esp-elf-gdb"]["version"] = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tl-rv-gdb")
+            self.packages["xtensa-esp-elf-gdb"]["optional"] = False if not mcu in ["esp32c2", "esp32c3", "esp32c6", "esp32h2"] else True
+            self.packages["xtensa-esp-elf-gdb"]["version"] = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tl-xt-gdb")
         else:
-            self.packages["tl-rv-gdb"]["optional"] = True
-            self.packages["tl-xt-gdb"]["optional"] = True
+            self.packages["riscv32-esp-elf-gdb"]["optional"] = True
+            self.packages["xtensa-esp-elf-gdb"]["optional"] = True
 
         # Enable check tools only when "check_tool" is enabled
         for p in self.packages:
@@ -93,17 +78,18 @@ class Espressif32Platform(PlatformBase):
             filesystem = variables.get("board_build.filesystem", "littlefs")
             if filesystem == "littlefs":
                 # Use mklittlefs v3.2.0 to generate FS
-                tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tool-mklittlefs")
                 self.packages["tool-mklittlefs"]["optional"] = False
-                self.packages["tool-mklittlefs"]["version"] = tl_path
+                self.packages["tool-mklittlefs"]["version"] = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tool-mklittlefs")
                 del self.packages["tool-mkfatfs"]
                 del self.packages["tool-mkspiffs"]
             elif filesystem == "fatfs":
                 self.packages["tool-mkfatfs"]["optional"] = False
+                self.packages["tool-mkfatfs"]["version"] = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tool-mkfatfs")
                 del self.packages["tool-mklittlefs"]
                 del self.packages["tool-mkspiffs"]
             elif filesystem == "spiffs":
                 self.packages["tool-mkspiffs"]["optional"] = False
+                self.packages["tool-mkspiffs"]["version"] = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tool-mkspiffs")
                 del self.packages["tool-mkfatfs"]
                 del self.packages["tool-mklittlefs"]
         else:
@@ -113,6 +99,7 @@ class Espressif32Platform(PlatformBase):
 
         if variables.get("upload_protocol"):
             self.packages["tool-openocd"]["optional"] = False
+            self.packages["tool-openocd"]["version"] = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tool-openocd")
         else:
             del self.packages["tool-openocd"]
 
@@ -120,13 +107,13 @@ class Espressif32Platform(PlatformBase):
             filesystem = variables.get("board_build.filesystem", "littlefs")
             if filesystem == "littlefs":
                 # Use mklittlefs v4.0.0 to unpack, older version is incompatible
-                tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tool-mklittlefs400")
                 self.packages["tool-mklittlefs"]["optional"] = False
-                self.packages["tool-mklittlefs"]["version"] = tl_path
+                self.packages["tool-mklittlefs"]["version"] = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tool-mklittlefs400")
 
         # Currently only Arduino Nano ESP32 uses the dfuutil tool as uploader
         if variables.get("board") == "arduino_nano_esp32":
             self.packages["tool-dfuutil"]["optional"] = False
+            self.packages["tool-dfuutil"]["version"] = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tool-dfuutil")
         else:
             del self.packages["tool-dfuutil"]
 
@@ -134,17 +121,19 @@ class Espressif32Platform(PlatformBase):
         for available_mcu in ("esp32", "esp32s2", "esp32s3"):
             if available_mcu == mcu and tl_flag:
                 tc_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-xt-%s" % mcu)
-                self.packages["tc-xt-%s" % mcu]["optional"] = False
-                self.packages["tc-xt-%s" % mcu]["version"] = tc_path
+                self.packages["toolchain-xtensa-%s" % mcu]["optional"] = False
+                self.packages["toolchain-xtensa-%s" % mcu]["version"] = tc_path
                 if available_mcu == "esp32":
-                    del self.packages["tc-rv32"]
-        # Enable ULP toolchains
+                    del self.packages["toolchain-riscv32-esp"]
+        # Enable riscv and ULP toolchains
         if mcu in ("esp32s2", "esp32s3", "esp32c2", "esp32c3", "esp32c6", "esp32h2"):
             if mcu in ("esp32c2", "esp32c3", "esp32c6", "esp32h2"):
-                del self.packages["tc-ulp"]
+                del self.packages["toolchain-esp32ulp"]
             # RISC-V based toolchain for ESP32C3, ESP32C6 ESP32S2, ESP32S3 ULP
             if tl_flag:
-                self.packages["tc-rv32"]["optional"] = False
+                tc_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-rv32")
+                self.packages["toolchain-riscv32-esp"]["optional"] = False
+                self.packages["toolchain-riscv32-esp"]["version"] = tc_path
 
         return super().configure_default_packages(variables, targets)
 
