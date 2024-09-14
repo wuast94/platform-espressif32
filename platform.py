@@ -49,7 +49,7 @@ if (tl_flag and not bool(os.path.exists(join(IDF_TOOLS_PATH_DEFAULT, "tools"))))
         sys.stderr.write("Error: Couldn't execute 'idf_tools.py install'\n")
     else:
         shutil.copytree(join(IDF_TOOLS_PATH_DEFAULT, "tools", "tool-packages"), join(IDF_TOOLS_PATH_DEFAULT, "tools"), symlinks=False, ignore=None, ignore_dangling_symlinks=False, dirs_exist_ok=True)
-        for p in ("tool-mklittlefs", "tool-mkfatfs", "tool-mkspiffs", "tool-dfuutil", "tool-openocd", "tool-cmake", "tool-ninja", "tool-cppcheck", "tool-clangtidy", "tool-pvs-studio", "tc-xt-esp32", "tc-xt-esp32s2", "tc-xt-esp32s3",  "tc-ulp", "tc-rv32", "tl-xt-gdb", "tl-rv-gdb", "contrib-piohome", "contrib-pioremote"):
+        for p in ("tool-mklittlefs", "tool-mkfatfs", "tool-mkspiffs", "tool-dfuutil", "tool-openocd", "tool-cmake", "tool-ninja", "tool-cppcheck", "tool-clangtidy", "tool-pvs-studio", "tc-xt-esp32", "tc-xt-esp32s2", "tc-xt-esp32s3", "tc-ulp", "tc-rv32", "tl-xt-gdb", "tl-rv-gdb", "contrib-piohome", "contrib-pioremote"):
             tl_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", p)
             pm.install(tl_path)
 
@@ -72,8 +72,10 @@ class Espressif32Platform(PlatformBase):
             self.packages["riscv32-esp-elf-gdb"]["optional"] = True
             self.packages["xtensa-esp-elf-gdb"]["optional"] = True
 
-        # Enable check tools only when "check_tool" is enabled
         if tl_flag:
+            # Install tool is not needed anymore
+            del self.packages["tl-install"]
+            # Enable check tools only when "check_tool" is enabled
             for p in self.packages:
                 if p in ("tool-cppcheck", "tool-clangtidy", "tool-pvs-studio"):
                     self.packages[p]["optional"] = False if str(variables.get("check_tool")).strip("['']") in p else True
@@ -81,6 +83,12 @@ class Espressif32Platform(PlatformBase):
         if "arduino" in frameworks:
             self.packages["framework-arduinoespressif32"]["optional"] = False
             self.packages["framework-arduinoespressif32-libs"]["optional"] = False
+
+        # packages for IDF and mixed Arduino+IDF projects
+        if tl_flag and "espidf" in frameworks:
+            for p in self.packages:
+                if p in ("tool-scons", "tool-cmake", "tool-ninja"):
+                    self.packages[p]["optional"] = False
 
         if "".join(targets) in ("upload", "buildfs", "uploadfs"):
             filesystem = variables.get("board_build.filesystem", "littlefs")
@@ -125,23 +133,28 @@ class Espressif32Platform(PlatformBase):
         else:
             del self.packages["tool-dfuutil"]
 
-        # Enable needed toolchains
-        for available_mcu in ("esp32", "esp32s2", "esp32s3"):
-            if available_mcu == mcu and tl_flag:
+        # Enable needed toolchain for MCU
+        if tl_flag and mcu in ("esp32", "esp32s2", "esp32s3"):
+            for available_mcu in ("esp32", "esp32s2", "esp32s3"):
                 tc_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-xt-%s" % mcu)
                 self.packages["toolchain-xtensa-%s" % mcu]["optional"] = False
                 self.packages["toolchain-xtensa-%s" % mcu]["version"] = tc_path
-                if available_mcu == "esp32":
-                    del self.packages["toolchain-riscv32-esp"]
-        # Enable riscv and ULP toolchains
-        if mcu in ("esp32s2", "esp32s3", "esp32c2", "esp32c3", "esp32c6", "esp32h2"):
-            if mcu in ("esp32c2", "esp32c3", "esp32c6", "esp32h2"):
-                del self.packages["toolchain-esp32ulp"]
-            # RISC-V based toolchain for ESP32C3, ESP32C6 ESP32S2, ESP32S3 ULP
+        else:
             if tl_flag:
                 tc_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-rv32")
                 self.packages["toolchain-riscv32-esp"]["optional"] = False
                 self.packages["toolchain-riscv32-esp"]["version"] = tc_path
+                
+        # Enable FSM ULP toolchain for ESP32, ESP32S2, ESP32S3 when IDF is selected
+        if tl_flag and "espidf" in frameworks and mcu in ("esp32", "esp32s2", "esp32s3"):
+            tc_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-ulp")
+            self.packages["toolchain-esp32ulp"]["optional"] = False
+            self.packages["toolchain-esp32ulp"]["version"] = tc_path
+        # Enable RISC-V ULP toolchain for ESP32C6, ESP32S2, ESP32S3 when IDF is selected
+        if tl_flag and "espidf" in frameworks and mcu in ("esp32s2", "esp32s3", "esp32c6"):
+            tc_path = "file://" + join(IDF_TOOLS_PATH_DEFAULT, "tools", "tc-rv32")
+            self.packages["toolchain-riscv32-esp"]["optional"] = False
+            self.packages["toolchain-riscv32-esp"]["version"] = tc_path
 
         return super().configure_default_packages(variables, targets)
 
