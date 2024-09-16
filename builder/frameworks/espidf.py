@@ -250,13 +250,11 @@ def populate_idf_env_vars(idf_env):
         os.path.dirname(get_python_exe()),
     ]
 
-    if mcu not in ("esp32c2", "esp32c3", "esp32c6", "esp32h2", "esp32p4"):
-        additional_packages.append(
-            os.path.join(platform.get_package_dir("toolchain-esp32ulp"), "bin"),
-        )
+#    if mcu in ("esp32", "esp32s2", "esp32s3"):
+#        additional_packages.append(
+#            os.path.join(platform.get_package_dir("toolchain-esp32ulp"), "bin"),
+#        )
 
-#    if IS_WINDOWS:
-#        additional_packages.append(platform.get_package_dir("tool-mconf"))
 
     idf_env["PATH"] = os.pathsep.join(additional_packages + [idf_env["PATH"]])
 
@@ -1300,17 +1298,6 @@ def install_python_deps():
             )
         )
 
-#        # A special "esp-windows-curses" python package is required on Windows
-#        # for Menuconfig on IDF <5
-#        if not IDF5 and "esp-windows-curses" not in installed_packages:
-#            env.Execute(
-#                env.VerboseAction(
-#                    '"%s" -m pip install "file://%s/tools/kconfig_new/esp-windows-curses"'
-#                    % (python_exe_path, FRAMEWORK_DIR),
-#                    "Installing windows-curses package",
-#                )
-#            )
-
 
 def get_idf_venv_dir():
     # The name of the IDF venv contains the IDF version to avoid possible conflicts and
@@ -1786,8 +1773,8 @@ env["BUILDERS"]["ElfToBin"].action = action
 #
 
 ulp_dir = os.path.join(PROJECT_DIR, "ulp")
-if os.path.isdir(ulp_dir) and os.listdir(ulp_dir) and mcu not in ("esp32c2", "esp32c3", "esp32c6", "esp32h2", "esp32p4"):
-    env.SConscript("ulp.py", exports="env sdk_config project_config idf_variant")
+if os.path.isdir(ulp_dir) and os.listdir(ulp_dir) and mcu not in ("esp32c2", "esp32c3", "esp32h2"):
+    env.SConscript("ulp.py", exports="env sdk_config project_config app_includes idf_variant")
 
 #
 # Process OTA partition and image
