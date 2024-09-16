@@ -21,7 +21,7 @@ from platformio.proc import where_is_program, exec_command
 
 from SCons.Script import Import
 
-Import("env sdk_config project_config idf_variant")
+Import("env sdk_config project_config app_includes idf_variant")
 
 ulp_env = env.Clone()
 platform = ulp_env.PioPlatform()
@@ -37,21 +37,23 @@ def prepare_ulp_env_vars(env):
 
     toolchain_path = platform.get_package_dir(
         "toolchain-xtensa-esp-elf"
+        if idf_variant not in ("esp32c6", "esp32p4")
+        else "toolchain-riscv32-esp"
+    )
+
+    toolchain_path_ulp = platform.get_package_dir(
+        "toolchain-esp32ulp"
+        if sdk_config.get("ULP_COPROC_TYPE_FSM", False)
+        else ""
     )
 
     additional_packages = [
         toolchain_path,
-        os.path.join(
-            platform.get_package_dir("toolchain-esp32ulp"),
-            "bin",
-        ),
+        toolchain_path_ulp,
         platform.get_package_dir("tool-ninja"),
         os.path.join(platform.get_package_dir("tool-cmake"), "bin"),
         os.path.dirname(where_is_program("python")),
     ]
-
-#    if "windows" in get_systype():
-#        additional_packages.append(platform.get_package_dir("tool-mconf"))
 
     for package in additional_packages:
         ulp_env.PrependENVPath("PATH", package)
@@ -89,7 +91,11 @@ def generate_ulp_config(target_config):
                 "-riscv" if riscv_ulp_enabled else "",
             )
         else:
-            ulp_toolchain = "toolchain-lp-core-riscv"
+            ulp_toolchain = "toolchain-lp-core-riscv.cmake"
+
+        comp_includes = ";".join(get_component_includes(target_config))
+        plain_includes = ";".join(app_includes["plain_includes"])
+        comp_includes = comp_includes + plain_includes
 
         cmd = (
             os.path.join(platform.get_package_dir("tool-cmake"), "bin", "cmake"),
@@ -105,7 +111,7 @@ def generate_ulp_config(target_config):
             "-DULP_S_SOURCES=%s" % ";".join([fs.to_unix_path(s.get_abspath()) for s in source]),
             "-DULP_APP_NAME=ulp_main",
             "-DCOMPONENT_DIR=" + os.path.join(ulp_env.subst("$PROJECT_DIR"), "ulp"),
-            "-DCOMPONENT_INCLUDES=%s" % ";".join(get_component_includes(target_config)),
+            "-DCOMPONENT_INCLUDES=" + comp_includes,
             "-DIDF_TARGET=%s" % idf_variant,
             "-DIDF_PATH=" + fs.to_unix_path(FRAMEWORK_DIR),
             "-DSDKCONFIG_HEADER=" + os.path.join(BUILD_DIR, "config", "sdkconfig.h"),
