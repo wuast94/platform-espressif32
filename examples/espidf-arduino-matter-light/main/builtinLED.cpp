@@ -1,10 +1,8 @@
 /*
     This example code is in the Public Domain (or CC0 licensed, at your option.)
-
     Unless required by applicable law or agreed to in writing, this
     software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
     CONDITIONS OF ANY KIND, either express or implied.
-
         This will implement the onboard WS2812b LED as a LED indicator
         It can be used to indicate some state or status of the device
         The LED can be controlled using RGB, HSV or color temperature, brightness
@@ -12,7 +10,6 @@
         In this example, the LED Indicator class is used as the Matter light accessory
 */
 
-#include <Arduino.h>
 #include "builtinLED.h"
 
 typedef struct {
@@ -88,7 +85,7 @@ led_indicator_color_hsv_t BuiltInLED::rgb2hsv(led_indicator_color_rgb_t rgb) {
             hsv.h = (60 * (rgb.r - rgb.g) / delta + 240);
         }
     }
-    return hsv;    
+    return hsv;
 }
 
 led_indicator_color_rgb_t BuiltInLED::hsv2rgb(led_indicator_color_hsv_t hsv) {
@@ -134,7 +131,7 @@ led_indicator_color_rgb_t BuiltInLED::hsv2rgb(led_indicator_color_hsv_t hsv) {
         rgb.b = rgb_max - rgb_adj;
         break;
     }
-    
+
     // gamma correction
     rgb.r = gamma_table[rgb.r];
     rgb.g = gamma_table[rgb.g];
@@ -145,20 +142,20 @@ led_indicator_color_rgb_t BuiltInLED::hsv2rgb(led_indicator_color_hsv_t hsv) {
 void BuiltInLED::begin(uint8_t pin){
     if (pin < NUM_DIGITAL_PINS) {
         pin_number = pin;
-        write();
+        log_i("Initializing pin %d", pin);
     } else {
         log_e("Invalid pin (%d) number", pin);
     }
 }
 void BuiltInLED::end(){
     state = false;
-    write();
+    write();  // turn off the LED
     if (pin_number < NUM_DIGITAL_PINS) {
         if (!rmtDeinit(pin_number)) {
             log_e("Failed to deinitialize RMT");
         }
     }
-} 
+}
 
 void BuiltInLED::on(){
     state = true;
@@ -248,4 +245,3 @@ void BuiltInLED::setTemperature(uint32_t temperature){
     hsv_color.s = saturation;
     log_d("Calculated Temperature: %ld, Hue: %d, Saturation: %d, Brightness: %d", temperature, hue, saturation, hsv_color.v);
 }
-
